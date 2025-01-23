@@ -1,4 +1,4 @@
-package com.caoyinglong.enums;
+package com.caoyinglong.statusenums;
 
 import com.caoyinglong.utils.IStatus;
 

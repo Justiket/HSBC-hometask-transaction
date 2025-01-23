@@ -2,7 +2,7 @@ package com.caoyinglong.transaction.assembler;
 
 import com.caoyinglong.transaction.domain.entity.Transaction;
 import com.caoyinglong.transaction.dto.TransactionDTO;
-import com.caoyinglong.utils.Page;
+import com.caoyinglong.transaction.enums.BusinessType;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class TransactionAssembler {
             return TransactionDTO.builder()
                     .id(entity.getId())
                     .accountId(entity.getAccountId())
-                    .bussinessType(entity.getBussinessType())
+                    .bussinessType(entity.getBussinessType().name())
                     .amount(entity.getAmount())
                     .createTime(entity.getCreateTime())
                     .updateTime(entity.getUpdateTime())
@@ -26,7 +26,7 @@ public class TransactionAssembler {
             return Transaction.builder()
                     .id(dto.getId())
                     .accountId(dto.getAccountId())
-                    .bussinessType(dto.getBussinessType())
+                    .bussinessType(BusinessType.getType(dto.getBussinessType()))
                     .amount(dto.getAmount())
                     .createTime(dto.getCreateTime())
                    .updateTime(dto.getUpdateTime())

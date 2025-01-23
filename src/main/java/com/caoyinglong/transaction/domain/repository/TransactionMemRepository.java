@@ -1,20 +1,15 @@
 package com.caoyinglong.transaction.domain.repository;
 
 import com.caoyinglong.transaction.domain.entity.Transaction;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
+@Repository
+public interface TransactionMemRepository extends JpaRepository<Transaction,String> {
 
-public interface TransactionMemRepository {
+    Page<Transaction> findAll(Pageable pageable);
 
-    String create(Transaction transaction);
-
-    String update(Transaction transaction);
-
-    String delete(String transaction);
-
-    Transaction findById(String id);
-
-    List<Transaction> findAll();
 }

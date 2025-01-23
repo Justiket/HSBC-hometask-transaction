@@ -1,7 +1,7 @@
 package com.caoyinglong.utils;
 
-import com.caoyinglong.enums.ApiStatus;
-import com.caoyinglong.enums.Status;
+import com.caoyinglong.statusenums.ApiStatus;
+import com.caoyinglong.statusenums.Status;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -62,18 +62,22 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> error() {
-        return new Result<T>(Status.ERROR);
+        return new Result<T>(ApiStatus.INTERNAL_SERVER_ERROR);
     }
 
     public static <T> Result<T> error(IStatus status) {
         return new Result<T>(status);
     }
 
+    public static <T> Result<T> error(IStatus status,T data) {
+        return new Result<T>(status,data);
+    }
+
     public static <T> Boolean ok(Result<T> result) {
         return Objects.nonNull(result) && result.getStatus() == ApiStatus.SUCCESS.getStatus();
     }
     public static <T> Boolean fail(Result<T> result) {
-        return Objects.nonNull(result) && result.getStatus() == ApiStatus.ERROR.getStatus();
+        return Objects.nonNull(result) && result.getStatus() == ApiStatus.INTERNAL_SERVER_ERROR.getStatus();
     }
 
     public int getStatus() {

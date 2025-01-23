@@ -3,3 +3,7 @@ spring:
     name: HSBC-hometask-transaction
   profiles:
     active: dev
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=60s

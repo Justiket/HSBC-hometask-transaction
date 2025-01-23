@@ -1,11 +1,15 @@
 package com.caoyinglong.transaction.domain.service;
 
+import com.caoyinglong.statusenums.ApiStatus;
 import com.caoyinglong.transaction.domain.entity.Transaction;
 import com.caoyinglong.transaction.domain.repository.TransactionMemRepository;
-import com.caoyinglong.exceptionUtils.ExceptionUtils;
+import com.caoyinglong.exceptions.ExceptionUtils;
 import io.micrometer.common.util.StringUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /**
  * @author caoyinglong
@@ -21,31 +25,33 @@ public class TransactionCommandService {
     @Autowired
     private TransactionQueryService queryService;
 
-    public String create(Transaction transaction) {
-        if(StringUtils.isNotBlank(transaction.getPrimaryKey())){
-            ExceptionUtils.wrappBusinessException("新增时主键不为空！");
-        }
+    @Transactional
+    public Transaction create(Transaction transaction) {
         transaction.setPrimaryKey();
         transaction.setDefaultValue();
-        return repository.create(transaction);
+        return repository.save(transaction);
     }
-    public String update(Transaction transaction) {
-        if(StringUtils.isBlank(transaction.getPrimaryKey())){
-            ExceptionUtils.wrappBusinessException("更新时主键为空！");
+
+    @Transactional
+    public Transaction update(Transaction transaction) {
+        if(Objects.isNull(transaction) || StringUtils.isBlank(transaction.getPrimaryKey())){
+            ExceptionUtils.wrappBusinessException("更新对象参数有误！",ApiStatus.REQ_PARAM_INVALID_ERROR);
         }
         Transaction oldTransaction = queryService.findById(transaction.getPrimaryKey());
         if(oldTransaction == null){
-            ExceptionUtils.wrappBusinessException("更新对象不存在！");
+            ExceptionUtils.wrappBusinessException("更新对象不存在！",ApiStatus.REQ_PARAM_INVALID_ERROR);
         }
         transaction.setUpdateValue();
-        return repository.update(transaction);
+        return repository.save(transaction);
     }
-    public String delete(String id) {
+
+    @Transactional
+    public void delete(String id) {
         Transaction oldTransaction = queryService.findById(id);
         if(oldTransaction == null){
-            ExceptionUtils.wrappBusinessException("删除对象不存在！");
+            return;
         }
-        return repository.delete(id);
+        repository.deleteById(id);
     }
 
 }

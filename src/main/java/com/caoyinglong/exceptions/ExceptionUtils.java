@@ -1,6 +1,7 @@
-package com.caoyinglong.exceptionUtils;
+package com.caoyinglong.exceptions;
 
 
+import com.caoyinglong.utils.IStatus;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,12 @@ public class ExceptionUtils {
         BusinessException ex = new BusinessException(message);
         Log.error(message, ex);
         throw new BusinessException(ex.getMessage());
+    }
+
+    public static void wrappBusinessException(String message, IStatus status) {
+        BusinessException ex = new BusinessException(message,status);
+        Log.error(message, ex);
+        throw new BusinessException(ex.getMessage(),status);
     }
 
     public static void wrappBusinessException(String message, Exception e) {

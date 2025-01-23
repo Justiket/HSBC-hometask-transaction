@@ -2,6 +2,9 @@ package com.caoyinglong.transaction.domain.entity;
 
 import com.caoyinglong.transaction.enums.BusinessType;
 import com.caoyinglong.utils.SnowflakeUtils;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -13,8 +16,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Transaction extends BaseEntity{
 
+    @Id
+    @Column(nullable = false)
     private String id;
 
     private String accountId;

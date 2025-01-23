@@ -21,10 +21,10 @@ public class TransactionDTO {
     @NotBlank(message = "account cannot be blank")
     private String accountId;
 
-    @NotNull(message = "bussinessType cannot be null")
-    private BusinessType bussinessType;
+    @NotBlank(message = "bussinessType cannot be null")
+    private String bussinessType;
 
-    @NotBlank(message = "amount cannot be blank")
+    @NotNull(message = "amount cannot be null")
     private BigDecimal amount;
 
     private LocalDateTime createTime;

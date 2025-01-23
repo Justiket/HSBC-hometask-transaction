@@ -1,4 +1,4 @@
-package com.caoyinglong.enums;
+package com.caoyinglong.statusenums;
 
 import com.caoyinglong.utils.IStatus;
 
@@ -10,8 +10,10 @@ import com.caoyinglong.utils.IStatus;
 public enum ApiStatus implements IStatus {
 
     SUCCESS(200, "操作成功"),
-    ERROR(500, "系统异常！"),
-    INVALID_PARAM_ERROR(400, "参数错误！");
+    TOO_MANY_REQUESTS(429, "请求过于频繁！"),
+    INTERNAL_SERVER_ERROR(500, "服务器内部错误！"),
+    REQ_PARAM_MISSING_ERROR(1001, "请求参数缺失！"),
+    REQ_PARAM_INVALID_ERROR(1002, "请求参数无效！");
 
     ApiStatus(int status, String message) {
         this.status = status;

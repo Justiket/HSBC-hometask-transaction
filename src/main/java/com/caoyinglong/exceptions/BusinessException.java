@@ -1,5 +1,7 @@
-package com.caoyinglong.exceptionUtils;
+package com.caoyinglong.exceptions;
 
+
+import com.caoyinglong.utils.IStatus;
 
 /**
  * @author caoyinglong
@@ -8,6 +10,8 @@ package com.caoyinglong.exceptionUtils;
  */
 public class BusinessException extends RuntimeException {
     private static final long serialVersionUID = 1L;
+
+    private IStatus status;
 
     public BusinessException(String msg) {
         super(msg);
@@ -19,5 +23,14 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(String msg, Throwable e) {
         super(msg, e);
+    }
+
+    public BusinessException(String msg, IStatus status) {
+        super(msg);
+        this.status = status;
+    }
+
+    public IStatus getStatus() {
+        return status;
     }
 }
