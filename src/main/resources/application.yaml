@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: HSBC-hometask-transaction
+  profiles:
+    active: dev
