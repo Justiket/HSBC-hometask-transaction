@@ -26,15 +26,15 @@ public class PageResult<T> implements Serializable {
     private List<T> datas;
 
     public static <T> PageResult<T> EMPTY_PAGE() {
-        return new PageResult<T>(0, new ArrayList<>());
+        return new PageResult<>(0, new ArrayList<>());
     }
 
     public static <T> PageResult<T> of(int total, int totalPage, int pageNum, int pageSize, List<T> datas) {
-        return new PageResult<T>(total, totalPage,pageNum, pageSize, datas);
+        return new PageResult<>(total, totalPage,pageNum, pageSize, datas);
     }
 
     public static <T> PageResult<T> of(int pageNum, int pageSize) {
-        return new PageResult<T>(pageNum, pageSize);
+        return new PageResult<>(pageNum, pageSize);
     }
 
     public boolean notEmpty() {

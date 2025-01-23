@@ -2,10 +2,12 @@ package com.caoyinglong.utils;
 
 import com.caoyinglong.statusenums.ApiStatus;
 import com.caoyinglong.statusenums.Status;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
 public class Result<T> implements Serializable {
     private int status;
     private String message;
@@ -78,22 +80,6 @@ public class Result<T> implements Serializable {
     }
     public static <T> Boolean fail(Result<T> result) {
         return Objects.nonNull(result) && result.getStatus() == ApiStatus.INTERNAL_SERVER_ERROR.getStatus();
-    }
-
-    public int getStatus() {
-        return this.status;
-    }
-
-    public String getMessage() {
-        return this.message;
-    }
-
-    public T getData() {
-        return this.data;
-    }
-
-    public Long getTimestamp() {
-        return this.timestamp;
     }
 
     public Result<T> setStatus(final int status) {

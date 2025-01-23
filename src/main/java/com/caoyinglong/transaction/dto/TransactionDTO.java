@@ -1,6 +1,5 @@
 package com.caoyinglong.transaction.dto;
 
-import com.caoyinglong.transaction.enums.BusinessType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

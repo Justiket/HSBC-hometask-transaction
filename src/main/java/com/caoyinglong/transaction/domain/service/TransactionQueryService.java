@@ -2,7 +2,6 @@ package com.caoyinglong.transaction.domain.service;
 
 import com.caoyinglong.transaction.domain.entity.Transaction;
 import com.caoyinglong.transaction.domain.repository.TransactionMemRepository;
-import com.caoyinglong.utils.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
