@@ -23,7 +23,7 @@ public class TransactionQueryService {
         return repository.findById(id).orElse(null);
     }
 
-    public Page<Transaction> findAll(Integer pageNum, Integer pageSize) {
+    public Page<Transaction> findPage(Integer pageNum, Integer pageSize) {
        // 创建 Pageable 对象，指定页码、每页数量和排序方式
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.DESC, "createTime"));
         return repository.findAll(pageable);

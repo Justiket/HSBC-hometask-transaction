@@ -43,17 +43,19 @@ public class TransactionApplicationService {
     public String updateTransaction(TransactionDTO dto) {
         return cmdService.update(TransactionAssembler.dtoToEntity(dto)).getPrimaryKey();
     }
+
     @Cacheable(value = "transaction",key = "#id")
     public TransactionDTO findById(String id) {
         return TransactionAssembler.entityToDto(queryService.findById(id));
     }
 
-    public PageResult<TransactionDTO> findAll(Integer pageNum, Integer pageSize) {
+    public PageResult<TransactionDTO> findPage(Integer pageNum, Integer pageSize) {
         if(!PageResult.isValid(pageNum,pageSize)){
             ExceptionUtils.wrappBusinessException("分页参数不合法！");
         }
         PageResult<TransactionDTO> pageResult= PageResult.of(pageNum,pageSize);
-        Page<Transaction> page = queryService.findAll(pageNum-1,pageSize);
+        //jpaRepository的分页是从0开始的
+        Page<Transaction> page = queryService.findPage(pageNum-1,pageSize);
         List<TransactionDTO> dtos = TransactionAssembler.entityToDto4List(page.getContent());
         pageResult.setDatas(dtos);
         pageResult.setTotal((int)page.getTotalElements());

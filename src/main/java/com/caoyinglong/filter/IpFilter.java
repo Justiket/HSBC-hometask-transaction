@@ -15,7 +15,7 @@ public class IpFilter implements Filter {
     // 存储每个 IP 地址的请求计数
     private final Map<String, AtomicInteger> ipCounts = new HashMap<>();
     // 最大请求次数
-    private static final int MAX_REQUESTS = 2;
+    private static final int MAX_REQUESTS = 100;
     // 时间窗口（毫秒）
     private static final long TIME_WINDOW = 60*1000;
     // 上次清理时间

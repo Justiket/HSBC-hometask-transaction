@@ -28,7 +28,7 @@ public class TransactionController {
      * @return 返回包含创建后交易记录的结果对象
      */
     @PostMapping
-    public Result<TransactionDTO> createTransaction(@Valid @RequestBody TransactionDTO dto) {
+    public Result<TransactionDTO> create(@Valid @RequestBody TransactionDTO dto) {
         // 调用应用服务层的createTransaction方法，根据交易信息创建交易记录
         TransactionDTO result = appService.createTransaction(dto);
         return Result.success(result);
@@ -41,7 +41,7 @@ public class TransactionController {
      * @return 返回成功结果
      */
     @DeleteMapping("/{id}")
-    public Result<Void> deleteTransaction(@PathVariable String id) {
+    public Result<Void> delete(@PathVariable String id) {
         // 调用应用服务层的deleteTransaction方法，根据交易ID删除交易记录
         appService.deleteTransaction(id);
         return Result.success();
@@ -56,7 +56,7 @@ public class TransactionController {
      * @return 返回包含更新后交易记录主键的结果对象
      */
     @PutMapping
-    public Result<String> updateTransaction(@Valid @RequestBody TransactionDTO dto) {
+    public Result<String> update(@Valid @RequestBody TransactionDTO dto) {
         // 调用应用服务层的updateTransaction方法，根据DTO更新信息更新交易记录
         String key = appService.updateTransaction(dto);
         return Result.success(key);
@@ -69,7 +69,7 @@ public class TransactionController {
      * @return 返回包含单个交易记录的结果对象
      */
     @GetMapping("/{id}")
-    public Result<TransactionDTO> getTransaction(@PathVariable String id) {
+    public Result<TransactionDTO> findById(@PathVariable String id) {
         // 调用应用服务层的findById方法，根据交易ID获取交易记录
         TransactionDTO transaction = appService.findById(id);
         return Result.success(transaction);
@@ -83,11 +83,11 @@ public class TransactionController {
      * @param pageSize 每页显示的记录数
      * @return 返回包含分页交易记录的结果对象
      */
-    @GetMapping
-    public Result<PageResult<TransactionDTO>> getAllTransaction(@RequestParam Integer pageNum,
-                                                                @RequestParam Integer pageSize) {
+    @GetMapping("/findPage")
+    public Result<PageResult<TransactionDTO>> findPage(@RequestParam Integer pageNum,
+                                                       @RequestParam Integer pageSize) {
         // 调用应用服务层的findAll方法，获取分页交易记录
-        PageResult<TransactionDTO> transaction = appService.findAll(pageNum, pageSize);
+        PageResult<TransactionDTO> transaction = appService.findPage(pageNum, pageSize);
         return Result.success(transaction);
     }
 

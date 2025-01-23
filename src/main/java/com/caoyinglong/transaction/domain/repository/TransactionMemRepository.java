@@ -9,7 +9,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TransactionMemRepository extends JpaRepository<Transaction,String> {
-
-    Page<Transaction> findAll(Pageable pageable);
-
 }

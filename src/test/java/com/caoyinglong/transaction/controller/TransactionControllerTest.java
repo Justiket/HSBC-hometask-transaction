@@ -1,112 +1,168 @@
-//package com.caoyinglong.transaction.controller;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.Mockito.*;
-//
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.http.HttpStatus;
-//
-//import com.caoyinglong.transaction.application.TransactionApplicationService;
-//import com.caoyinglong.transaction.dto.TransactionDTO;
-//import com.caoyinglong.utils.PageResult;
-//import com.caoyinglong.utils.Result;
-//
-//@SpringBootTest
-//class TransactionControllerTest {
-//
-//    @Autowired
-//    private TransactionController controller;
-//
-//    @MockBean
-//    private TransactionApplicationService appService;
-//
-//    @Test
-//    void createTransaction_shouldReturnSuccess() {
-//        // 模拟创建交易的 DTO
-//        TransactionDTO dto = new TransactionDTO();
-//
-//        // 模拟应用服务层的创建交易方法返回结果
-//        TransactionDTO createdDto = new TransactionDTO();
-//        when(appService.createTransaction(dto)).thenReturn(createdDto);
-//
-//        // 执行创建交易的请求
-//        Result<TransactionDTO> result = controller.createTransaction(dto);
-//
-//        // 验证结果
-//        assertNotNull(result);
-//        assertEquals(HttpStatus.OK, result.getHttpStatus());
-//        assertEquals(createdDto, result.getData());
-//    }
-//
-//    @Test
-//    void deleteTransaction_shouldReturnSuccess() {
-//        // 模拟交易 ID
-//        String id = "123";
-//
-//        // 执行删除交易的请求
-//        Result<Void> result = controller.deleteTransaction(id);
-//
-//        // 验证结果
-//        assertNotNull(result);
-//        assertEquals(HttpStatus.OK, result.getHttpStatus());
-//    }
-//
-//    @Test
-//    void updateTransaction_shouldReturnSuccess() {
-//        // 模拟更新交易的 DTO
-//        TransactionDTO dto = new TransactionDTO();
-//
-//        // 模拟应用服务层的更新交易方法返回结果
-//        String key = "updatedKey";
-//        when(appService.updateTransaction(dto)).thenReturn(key);
-//
-//        // 执行更新交易的请求
-//        Result<String> result = controller.updateTransaction(dto);
-//
-//        // 验证结果
-//        assertNotNull(result);
-//        assertEquals(HttpStatus.OK, result.getHttpStatus());
-//        assertEquals(key, result.getData());
-//    }
-//
-//    @Test
-//    void getTransaction_shouldReturnSuccess() {
-//        // 模拟交易 ID
-//        String id = "123";
-//
-//        // 模拟应用服务层根据 ID 获取交易的结果
-//        TransactionDTO transaction = new TransactionDTO();
-//        when(appService.findById(id)).thenReturn(transaction);
-//
-//        // 执行获取交易的请求
-//        Result<TransactionDTO> result = controller.getTransaction(id);
-//
-//        // 验证结果
-//        assertNotNull(result);
-//        assertEquals(HttpStatus.OK, result.getHttpStatus());
-//        assertEquals(transaction, result.getData());
-//    }
-//
-//    @Test
-//    void getAllTransaction_shouldReturnSuccess() {
-//        // 模拟页码和每页大小
-//        int pageNum = 1;
-//        int pageSize = 10;
-//
-//        // 模拟应用服务层获取所有交易的分页结果
-//        PageResult<TransactionDTO> pageResult = new PageResult<>();
-//        when(appService.findAll(pageNum, pageSize)).thenReturn(pageResult);
-//
-//        // 执行获取所有交易的请求
-//        Result<PageResult<TransactionDTO>> result = controller.getAllTransaction(pageNum, pageSize);
-//
-//        // 验证结果
-//        assertNotNull(result);
-//        assertEquals(HttpStatus.OK, result.getHttpStatus());
-//        assertEquals(pageResult, result.getData());
-//    }
-//}
-//
+package com.caoyinglong.transaction.controller;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import cn.hutool.json.JSONUtil;
+import com.caoyinglong.statusenums.ApiStatus;
+import com.caoyinglong.transaction.application.TransactionApplicationService;
+import com.caoyinglong.transaction.dto.TransactionDTO;
+import com.caoyinglong.transaction.enums.BusinessType;
+import com.caoyinglong.utils.PageResult;
+import com.caoyinglong.utils.Result;
+import com.caoyinglong.utils.SnowflakeUtils;
+import org.junit.jupiter.api.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.util.List;
+
+@WebMvcTest(TransactionController.class)
+class TransactionControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private TransactionApplicationService appService;
+
+    @Test
+    public void createSuccess() throws Exception {
+        // 创建交易 DTO 对象
+        TransactionDTO dto = initDTO();
+
+        // 模拟应用服务层的方法调用，返回创建成功的交易 DTO
+        when(appService.createTransaction(dto)).then(new Answer<TransactionDTO>() {
+            @Override
+            public TransactionDTO answer(InvocationOnMock invocation) throws Throwable {
+                dto.setId(SnowflakeUtils.generateId());
+                return dto;
+            }
+        }).thenReturn(dto);
+
+        // 发送 POST 请求创建交易
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/transaction")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(dto)))
+                .andReturn();
+
+        Result result = getResultForMvcResult(mvcResult);
+        assertNotNull(result);
+        // 验证响应状态码为 200
+        assertEquals(ApiStatus.SUCCESS.getStatus(), result.getStatus());
+    }
+
+    @Test
+    public void createInvalid() throws Exception {
+        // 创建无效的交易 DTO 对象（缺少必要字段）
+        TransactionDTO dto = new TransactionDTO();
+
+        // 发送 POST 请求创建交易
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/transaction")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(dto)))
+                .andReturn();
+
+
+        Result result = getResultForMvcResult(mvcResult);
+        assertNotNull(result);
+        //目前所有参数检查均为非空检查，因此错误统一使用ReqParamMissingError,后续根据情况修改
+        assertEquals(ApiStatus.REQ_PARAM_MISSING_ERROR.getStatus(), result.getStatus());
+    }
+
+    @Test
+    public void deleteSuccess() throws Exception {
+        // 模拟应用服务层的方法调用，返回删除成功的结果
+        doNothing().when(appService).deleteTransaction("123");
+        // 发送 DELETE 请求删除交易
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete("/transaction/123"))
+               .andReturn();
+
+        Result result = getResultForMvcResult(mvcResult);
+        assertNotNull(result);
+        // 验证响应状态码为 200
+        assertEquals(ApiStatus.SUCCESS.getStatus(), result.getStatus());
+    }
+
+    @Test
+    public void updateSuccess() throws Exception {
+        // 创建交易 DTO 对象
+        TransactionDTO dto = initDTO();
+        // 模拟应用服务层的方法调用，返回更新成功的交易 DTO
+        when(appService.updateTransaction(dto)).thenReturn(dto.getId());
+        // 发送 PUT 请求更新交易
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put("/transaction")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(dto)))
+                .andReturn();
+
+        Result result = getResultForMvcResult(mvcResult);
+        assertNotNull(result);
+        // 验证响应状态码为 200
+        assertEquals(ApiStatus.SUCCESS.getStatus(), result.getStatus());
+    }
+
+    @Test
+    public void findByIdSuccess() throws Exception {
+        // 创建交易 DTO 对象
+        TransactionDTO dto = initDTO();
+        // 模拟应用服务层的方法调用，返回更新成功的交易 DTO
+        when(appService.findById(dto.getId())).thenReturn(dto);
+        // 发送 GET 请求更新交易
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/transaction/"+dto.getId()))
+               .andReturn();
+
+        Result result = getResultForMvcResult(mvcResult);
+        assertNotNull(result);
+        // 验证响应状态码为 200
+        assertEquals(ApiStatus.SUCCESS.getStatus(), result.getStatus());
+    }
+
+    @Test
+    public void findPageSuccess() throws Exception {
+        // 创建交易 DTO 对象
+        TransactionDTO dto = initDTO();
+        PageResult<TransactionDTO> pageResult = PageResult.of(1,1,1,10,(List.of(dto)));
+        // 模拟应用服务层的方法调用，返回更新成功的交易 DTO
+        when(appService.findPage(1,10)).thenReturn(pageResult);
+        // 发送 GET 请求更新交易
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/transaction/findPage")
+                       .param("pageNum","1")
+                       .param("pageSize","10"))
+               .andReturn();
+        Result result = getResultForMvcResult(mvcResult);
+        assertNotNull(result);
+        // 验证响应状态码为 200
+        assertEquals(ApiStatus.SUCCESS.getStatus(), result.getStatus());
+    }
+
+    private static Result getResultForMvcResult(MvcResult mvcResult) throws UnsupportedEncodingException {
+        if (mvcResult == null) {
+            return Result.error();
+        }
+        return JSONUtil.parse(mvcResult.getResponse().getContentAsString()).toBean(Result.class);
+    }
+
+    private TransactionDTO initDTO(){
+        return TransactionDTO.builder()
+                .id(SnowflakeUtils.generateId())
+                .amount(new BigDecimal("100.0"))
+                .accountId("123")
+                .bussinessType(BusinessType.DEPOSIT.name())
+                .build();
+    }
+
+
+
+}
