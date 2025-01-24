@@ -7,7 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.caoyinglong.statusenums.ApiStatus;
 import com.caoyinglong.transaction.application.TransactionApplicationService;
 import com.caoyinglong.transaction.dto.TransactionDTO;
-import com.caoyinglong.transaction.enums.BusinessType;
+import com.caoyinglong.transaction.domain.enums.BusinessType;
 import com.caoyinglong.utils.PageResult;
 import com.caoyinglong.utils.Result;
 import com.caoyinglong.utils.SnowflakeUtils;

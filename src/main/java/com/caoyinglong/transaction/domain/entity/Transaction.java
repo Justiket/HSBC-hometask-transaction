@@ -1,6 +1,6 @@
 package com.caoyinglong.transaction.domain.entity;
 
-import com.caoyinglong.transaction.enums.BusinessType;
+import com.caoyinglong.transaction.domain.enums.BusinessType;
 import com.caoyinglong.utils.SnowflakeUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

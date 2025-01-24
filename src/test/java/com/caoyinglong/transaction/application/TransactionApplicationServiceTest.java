@@ -1,8 +1,7 @@
 package com.caoyinglong.transaction.application;
 import com.caoyinglong.transaction.domain.entity.Transaction;
 import com.caoyinglong.transaction.domain.service.TransactionQueryService;
-import com.caoyinglong.transaction.dto.TransactionDTO;
-import com.caoyinglong.transaction.enums.BusinessType;
+import com.caoyinglong.transaction.domain.enums.BusinessType;
 import com.caoyinglong.utils.SnowflakeUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

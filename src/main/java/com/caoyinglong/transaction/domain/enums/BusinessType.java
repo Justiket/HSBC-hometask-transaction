@@ -1,4 +1,4 @@
-package com.caoyinglong.transaction.enums;
+package com.caoyinglong.transaction.domain.enums;
 
 public enum BusinessType {
     DEPOSIT,

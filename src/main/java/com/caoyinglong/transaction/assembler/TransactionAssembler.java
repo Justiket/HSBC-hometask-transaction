@@ -2,7 +2,7 @@ package com.caoyinglong.transaction.assembler;
 
 import com.caoyinglong.transaction.domain.entity.Transaction;
 import com.caoyinglong.transaction.dto.TransactionDTO;
-import com.caoyinglong.transaction.enums.BusinessType;
+import com.caoyinglong.transaction.domain.enums.BusinessType;
 
 import java.util.List;
 
