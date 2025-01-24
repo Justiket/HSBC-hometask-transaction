@@ -1,8 +1,11 @@
-HSBC-HomeTask-Transaction
-README 文件
-银行交易管理系统
-这是一个简单的银行交易管理系统，使用 Java 21 和 Spring Boot 构建，所有数据保存在内存中，无需持久化存储。
-项目结构
+#HSBC-HomeTask-Transaction
+
+##功能说明
+1.实现了简单的交易管理功能，对Transaction对象进行增、删、改、查等功能
+2.时间紧迫，前端项目只进行了搭建，未做开发。
+
+##项目结构
+项目结构遵循
 src/main/java：主要的 Java 源代码目录。
 com.example.transactionmanagement.entity：包含交易实体类 Transaction。
 com.example.transactionmanagement.service：包含交易服务类 TransactionService。
