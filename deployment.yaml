@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hometask-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hometask-label
+  template:
+    metadata:
+      labels:
+        app: hometask-label
+    spec:
+      containers:
+        - name: hometask-container
+          image: hometask:0.0.1
+          ports:
+            - containerPort: 8080
